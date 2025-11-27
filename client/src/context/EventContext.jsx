@@ -2,6 +2,8 @@ import { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 import AuthContext from './AuthContext';
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://timedesk-backend-hcm7.onrender.com';
+
 const EventContext = createContext();
 
 export const EventProvider = ({ children }) => {
@@ -19,7 +21,7 @@ export const EventProvider = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            const { data } = await axios.get('http://localhost:5000/api/events', config);
+            const { data } = await axios.get(`${API_URL}/api/events`, config);
             setEvents(data);
             setLoading(false);
         } catch (error) {
@@ -35,7 +37,7 @@ export const EventProvider = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            const { data } = await axios.post('http://localhost:5000/api/events', eventData, config);
+            const { data } = await axios.post(`${API_URL}/api/events`, eventData, config);
             setEvents([...events, data]);
             return data;
         } catch (error) {
@@ -52,7 +54,7 @@ export const EventProvider = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            const { data } = await axios.put(`http://localhost:5000/api/events/${id}`, eventData, config);
+            const { data } = await axios.put(`${API_URL}/api/events/${id}`, eventData, config);
             setEvents(events.map((event) => (event._id === id ? data : event)));
             return data;
         } catch (error) {
@@ -69,7 +71,7 @@ export const EventProvider = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            await axios.delete(`http://localhost:5000/api/events/${id}`, config);
+            await axios.delete(`${API_URL}/api/events/${id}`, config);
             setEvents(events.filter((event) => event._id !== id));
         } catch (error) {
             console.error(error);
